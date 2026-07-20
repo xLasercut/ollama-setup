@@ -1,0 +1,33 @@
+services:
+  ollama:
+    container_name: ollama
+    image: docker.io/ollama/ollama:rocm
+    volumes:
+      - ./volumes/ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    restart: unless-stopped
+    networks:
+      - ollama-docker
+
+  ollama-webui:
+    container_name: ollama-webui
+    image: ghcr.io/open-webui/open-webui:main
+    volumes:
+      - ./volumes/open-webui:/app/backend/data
+    ports:
+      - "3000:8080"
+    restart: unless-stopped
+    networks:
+      - ollama-docker
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+
+networks:
+  ollama-docker:
+    external: false
+    enable_ipv6: false
