@@ -2,5 +2,6 @@
 .vscode
 
 volumes/*
+!volumes/model-files
 
 !.gitkeep
